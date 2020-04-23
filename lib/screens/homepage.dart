@@ -1,7 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
-
 import 'landing_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +11,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double _deviceHeight;
   double _deviceWidth;
+  String _email;
+  String _password;
+  final GlobalKey<FormState> formKey =  GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
@@ -47,7 +49,6 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    
                     SizedBox(width: 10.0, height: 30.0),
                     Container(
                       width: 250.0,
@@ -59,8 +60,10 @@ class _HomePageState extends State<HomePage> {
                             text: [
                               " Watch TV. Better than before..",
                             ],
-                            textStyle:
-                                TextStyle(fontSize: 15.0, fontFamily: "Bobbers", color: Colors.deepOrange),
+                            textStyle: TextStyle(
+                                fontSize: 15.0,
+                                fontFamily: "Bobbers",
+                                color: Colors.deepOrange),
                             textAlign: TextAlign.center,
                             alignment: AlignmentDirectional
                                 .topStart // or Alignment.topLeft
@@ -70,62 +73,75 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 // SizedBox(height: 30.0),
-                SizedBox(height: _deviceHeight * 0.05),
-
-              _emailTextField(),
-              SizedBox(height: _deviceHeight * 0.05),
-              _passwordTextField(),
-              SizedBox(height: _deviceHeight * 0.10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width * .3,
-                  height: 60.0,
-                  decoration: BoxDecoration(color: Colors.deepOrangeAccent),
-                  child: FlatButton(
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 2.0,
+                SizedBox(height: _deviceHeight * 0.01),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _emailTextField(),
+                      SizedBox(height: _deviceHeight * 0.05),
+                      _passwordTextField(),
+                      SizedBox(height: _deviceHeight * 0.05),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width * .3,
+                            height: 60.0,
+                            decoration:
+                                BoxDecoration(color: Colors.deepOrangeAccent),
+                            child: FlatButton(
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 2.0,
+                                ),
+                              ),
+                              onPressed: ()  {
+                                formKey.currentState.save();
+                                print('The email is $_email');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => LandingPage(email: _email,),
+                                  ));
+                              },
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * .3,
+                            height: 60.0,
+                            decoration: BoxDecoration(color: Colors.black),
+                            child: FlatButton(
+                              child: Text(
+                                'Create Account',
+                                style: TextStyle(
+                                  color: Colors.deepOrangeAccent,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 2.0,
+                                ),
+                              ),
+                              onPressed: ()  {
+                                formKey.currentState.save();
+                                print('The email is $_email');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => LandingPage(email: _email,),
+                                  ));
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => LandingPage(),
-                        )),
+                    ],
                   ),
                 ),
-
-                 Container(
-                  width: MediaQuery.of(context).size.width * .3,
-                  height: 60.0,
-                  decoration: BoxDecoration(color: Colors.black),
-                  child: FlatButton(
-                    child: Text(
-                      'Create Account',
-                      style: TextStyle(
-                        color: Colors.deepOrangeAccent,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 2.0,
-                      ),
-                    ),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => LandingPage(),
-                        )),
-                  ),
-                ),
-
-              ],),
-                
-              
               ],
             ),
           ),
@@ -151,12 +167,14 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   Widget _emailTextField() {
     return Container(
       width: _deviceWidth * 0.70,
-      child: TextField(
+      child: TextFormField(
         cursorColor: Colors.black,
         autocorrect: false,
+        onSaved: (val) => _email = val,
         style: TextStyle(color: Colors.black54),
         decoration: InputDecoration(
           hintText: "Enter your e-mail here",
@@ -175,8 +193,9 @@ class _HomePageState extends State<HomePage> {
   Widget _passwordTextField() {
     return Container(
       width: _deviceWidth * 0.70,
-      child: TextField(
+      child: TextFormField(
         obscureText: true,
+        onSaved: (val) => _password = val,
         cursorColor: Colors.black,
         autocorrect: false,
         style: TextStyle(color: Colors.black54),
@@ -193,5 +212,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  
 
 }
